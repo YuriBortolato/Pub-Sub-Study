@@ -27,18 +27,13 @@ namespace umfg.publisher.console
                     autoDelete: false,
                     arguments: null);
 
+                var properties = new BasicProperties()
+                {
+                    Persistent = true
+                };
+
                 foreach (var numero in Enumerable.Range(1, 10))
                 {
-                    /*
-                     * (string exchange, string routingKey,
-            bool mandatory, TProperties basicProperties, ReadOnlyMemory<byte> body,
-            CancellationToken cancellationToken = default)
-                     */
-
-                    var properties = new BasicProperties
-                    {
-                        Persistent = true
-                    };
 
                     await Task.Delay(TimeSpan.FromSeconds(1));
                     await channel.BasicPublishAsync("",
@@ -47,14 +42,17 @@ namespace umfg.publisher.console
                         properties,
                         Encoding.UTF8.GetBytes($"{numero}º Hello Word!"),
                         CancellationToken.None);
+
+                    Console.WriteLine($"Mensagem {numero} enviada!");
                 }
 
                 Console.WriteLine("Fim envio de mensagens!");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
         }
     }
 }
+
